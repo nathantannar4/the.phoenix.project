@@ -1,0 +1,18 @@
+### Vapor ###
+Config/secrets
+Push/Certificates
+Storage
+Logs
+
+### Vapor Patch ###
+Packages
+.build
+xcuserdata
+*.xcodeproj
+DerivedData/
+.DS_Store
+Package.resolved
+
+### Local Dev ###
+Local\ Packages
+PhoenixClientExample
