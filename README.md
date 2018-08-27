@@ -102,7 +102,7 @@ Controller: `AuthController.swift`
 
 > Register a new user, send an email verification if email supplied and SendGrid setup
 
-Route: `POST /register`
+Route: `POST /auth/register`
 
 Required Headers: `X-API-KEY`
 
@@ -114,7 +114,7 @@ Returns: `User.Pulic`
 
 > Get a bearer token for authorization and starts an auth session for the user
 
-Route: `POST /login`
+Route: `POST /auth/login`
 
 Required Headers: `X-API-KEY`, `Basic Authorization`
 
@@ -124,7 +124,7 @@ Returns: `BearerToken.Public`
 
 > Verify if the supplied bearer token is valid
 
-Route: `GET /verify/login`
+Route: `GET /auth/verify/login`
 
 Required Headers: `X-API-KEY`, `Bearer Authorization`
 
@@ -134,7 +134,7 @@ Returns: `User.Public`
 
 > End the auth session for the user and invalidate the supplied bearer token
 
-Route: `POST /logout`
+Route: `POST /auth/logout`
 
 Required Headers: `X-API-KEY`, `Bearer Authorization`
 
@@ -142,7 +142,7 @@ Required Headers: `X-API-KEY`, `Bearer Authorization`
 
 > Email an email verification link to the authenticated users email
 
-Route: `POST /request/passwordreset`
+Route: `POST /auth/request/passwordreset`
 
 Required Headers: `X-API-KEY`, `Bearer Authorization`
 
@@ -152,7 +152,7 @@ Returns: `String` (result message)
 
 > Verify a users email with the supplied token (sent in the verification email), invalidate the token after use
 
-Route: `GET /verify/email/:verifytoken`
+Route: `GET /auth/verify/email/:verifytoken`
 
 Returns: `String` (result message)
 
@@ -160,7 +160,7 @@ Returns: `String` (result message)
 
 > Email a password reset link to the users email
 
-Route: `POST /request/passwordreset`
+Route: `POST /auth/request/passwordreset`
 
 Required Headers: `X-API-KEY`
 
@@ -172,7 +172,7 @@ Returns: `String` (result message)
 
 > Resets the users password to a new temporary one, invalidate the token after use
 
-Route: `GET /reset/password/:verifytoken`
+Route: `GET /auth/reset/password/:verifytoken`
 
 Returns: `String` (temporary password)
 
@@ -180,7 +180,7 @@ Returns: `String` (temporary password)
 
 > Verify auth session user is the same as payload user, resets the authenticated users password to the new password supplied in the payload
 
-Route: `PUT /reset/password/`
+Route: `PUT /auth/reset/password/`
 
 Payload: `{"username": String, "password": String}`
 
