@@ -29,6 +29,28 @@ struct Image: Codable {
     let filename: String
 }
 
+struct Message: Codable {
+    let id: String
+    let createdAt: Date
+    let updatedAt: Date
+    let text: String
+    let user: User
+}
+
+struct ConnectedUser: Codable {
+    let userId: String
+    let updatedAt: Date
+}
+
+struct Conversation: Codable {
+    let id: String
+    let createdAt: Date
+    let updatedAt: Date
+    let users: [User]
+    let connectedUsers: [ConnectedUser]
+    let lastMessage: Message?
+}
+
 struct BearerToken: Decodable {
     let value: String
     let createdAt: Date

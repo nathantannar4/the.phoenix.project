@@ -21,20 +21,14 @@ class ConversationManager: SocketManager {
     }
     
     func interceptConnection(_ conn: ConversationConnection, to roomId: RoomID, fallback: (ConversationConnection) throws -> Room) throws {
-        print("Intercepting connection for RoomID: ", roomId)
         
         if let index = rooms.index(where: { $0.id == roomId }) {
-            print("Joining existing room for RoomID: ", roomId)
             rooms[index].connect(conn)
         } else {
-            print("Creating room for RoomID: ", roomId)
             let room = try fallback(conn)
             room.connect(conn)
             rooms.insert(room)
         }
-        
-        print("Room Count at: ", rooms.count)
-        
     }
     
 }

@@ -15,10 +15,11 @@ enum API {
     case ping
     
     case signUp(Auth)
-    
     case login(Auth)
-    
+    case logout
     case verifyLogin
+    
+    case conversations
     
     
 }
@@ -37,14 +38,18 @@ extension API: TargetType {
             return "/auth/login"
         case .verifyLogin:
             return "/auth/verify/login"
+        case .logout:
+            return "/auth/logout"
+        case .conversations:
+            return "/conversations"
         }
     }
     
     var method: Moya.Method {
         switch self {
-        case .ping, .verifyLogin:
+        case .ping, .verifyLogin, .conversations:
             return .get
-        case .signUp, .login:
+        case .signUp, .login, .logout:
             return .post
         }
     }
@@ -65,7 +70,7 @@ extension API: TargetType {
     
     var task: Task {
         switch self {
-        case .ping, .verifyLogin:
+        case .ping, .verifyLogin, .logout, .conversations:
             return .requestPlain
         case .signUp(let auth):
             return .requestJSONEncodable(auth)
@@ -80,11 +85,11 @@ extension API: AccessTokenAuthorizable {
     
     var authorizationType: AuthorizationType {
         switch self {
-        case .login:
+        case .login(_):
             return .basic
-        case .verifyLogin:
+        case .verifyLogin, .logout, .conversations:
             return .bearer
-        default:
+        case .ping, .signUp(_):
             return .none
         }
     }

@@ -7,7 +7,6 @@ final class BasicTests: AppTestCase {
     // MARK: - Linux
     
     static let allTests = [
-        
     ]
     
     // MARK: - Tests

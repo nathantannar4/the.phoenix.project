@@ -202,9 +202,9 @@ final class LoginViewController: UIViewController {
         let auth = Auth(username: email, password: password, email: email)
         Network.request(.login(auth))
             .then { [weak self] _ in
-                let alert = UIAlertController(title: "Success", message: nil, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self?.present(alert, animated: true, completion: nil)
+                let conversationVC = ConversationsViewController()
+                let navVC = UINavigationController(rootViewController: conversationVC)
+                self?.present(navVC, animated: true, completion: nil)
             }.catch { [weak self] error in
                 let alert = UIAlertController(title: "Error", message: error.localizedDescription, preferredStyle: .alert)
                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

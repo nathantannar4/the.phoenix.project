@@ -33,22 +33,24 @@ class ConversationRoom: SocketRoom<IDType, IDType> {
     
     override func connect(_ conn: Connection) {
         super.connect(conn)
-        print("Conversation.ID: ", id, " connected user for User.ID: ", conn.id)
     }
     
     override func disconnect(_ conn: Connection) {
         super.disconnect(conn)
-        print("Conversation.ID: ", id, " disconnected user for User.ID: ", conn.id)
     }
     
     override func onBinary(_ data: Data, from conn: Connection) {
-        print("onBinary from User.ID: ", conn.id)
+        
+        if (try? JSONDecoder.decode(TypingStatus.self, from: data)) != nil {
+            connections.forEach { $0.ws.send(data) }
+            return
+        }
+        
         do {
             let message = try JSONDecoder.decode(Message.self, from: data)
             message.save(on: conn.conn).thenThrowing { [weak self] message in
                 guard let connections = self?.connections else { return }
                 let data = try JSONEncoder.encode(message)
-                print("Current connection count: ", connections.count)
                 connections.forEach { $0.ws.send(data) }
             }.catch { error in
                 conn.onError(conn.ws, error)
@@ -59,12 +61,10 @@ class ConversationRoom: SocketRoom<IDType, IDType> {
     }
     
     override func onText(_ text: String, from conn: Connection) {
-        print("onText from User.ID: ", conn.id)
         Message(text: text, userId: conn.id, conversationId: id)
             .save(on: conn.conn)
             .thenThrowing { [weak self] message in
                 guard let connections = self?.connections else { return }
-                print("Current connection count: ", connections.count)
                 let data = try JSONEncoder.encode(message)
                 connections.forEach { $0.ws.send(data) }
             }.catch { error in
@@ -74,7 +74,7 @@ class ConversationRoom: SocketRoom<IDType, IDType> {
     
 }
 
-extension JSONEncoder {
+fileprivate extension JSONEncoder {
     
     static func encode<T:Encodable>(_ value: T) throws -> Data {
         let encoder = JSONEncoder()
@@ -86,7 +86,7 @@ extension JSONEncoder {
     
 }
 
-extension JSONDecoder {
+fileprivate extension JSONDecoder {
     
     static func decode<T:Decodable>(_ type: T.Type, from data: Data) throws -> T {
         let decoder = JSONDecoder()
