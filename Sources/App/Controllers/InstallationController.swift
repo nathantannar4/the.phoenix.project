@@ -36,7 +36,7 @@ final class InstallationController: RouteCollection {
         }
     }
 
-    open func index(_ req: Request) throws -> Future<Installation.Public> {
+    func index(_ req: Request) throws -> Future<Installation.Public> {
         
         guard let user = try req.authenticated(User.self) else {
             throw Abort(.unauthorized)
@@ -51,7 +51,7 @@ final class InstallationController: RouteCollection {
         }.mapToPublic(on: req)
     }
     
-    open func create(_ req: Request) throws -> Future<Installation.Public> {
+    func create(_ req: Request) throws -> Future<Installation.Public> {
         
         guard let user = try req.authenticated(User.self) else {
             throw Abort(.unauthorized)

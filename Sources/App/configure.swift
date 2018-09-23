@@ -12,12 +12,7 @@ public func configure(
 ) throws {
 
     // Router
-    let router: EngineRouter
-    if let mount = Environment.MOUNT {
-        router = EngineRouter(caseInsensitive: false, mountPath: .constant(mount))
-    } else {
-        router = .default()
-    }
+    let router = EngineRouter.default()
     try routes(router)
     services.register(router, as: Router.self)
 
@@ -81,7 +76,7 @@ public func configure(
     dbsConfig.add(database: MySQLDatabase(config: mysqlConfig), as: .mysql)
     dbsConfig.enableLogging(on: .mysql)
     services.register(dbsConfig)
-    config.prefer(MemoryCache.self, for: KeyedCache.self)
+    config.prefer(MemoryKeyedCache.self, for: KeyedCache.self)
     
     // Secret
     services.register(SecretMiddleware.self)

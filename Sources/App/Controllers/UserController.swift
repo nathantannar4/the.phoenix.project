@@ -24,7 +24,7 @@ final class UserController: RouteCollection {
         
     }
     
-    open func list(_ req: Request) throws -> Future<[User.Public]> {
+    func list(_ req: Request) throws -> Future<[User.Public]> {
         return User.query(on: req).sort(\.createdAt).all().flatMap(to: [User.Public].self) { users in
             return users.map { user in
                 Future.map(on: req) { user }.mapToPublic(on: req)
@@ -32,18 +32,18 @@ final class UserController: RouteCollection {
         }
     }
     
-    open func index(_ req: Request) throws -> Future<User.Public> {
+    func index(_ req: Request) throws -> Future<User.Public> {
         return try req.parameters.next(User.self).mapToPublic(on: req)
     }
     
-    open func delete(_ req: Request) throws -> Future<HTTPStatus> {
+    func delete(_ req: Request) throws -> Future<HTTPStatus> {
         guard let user = try req.authenticated(User.self) else {
             throw Abort(.unauthorized)
         }
         return user.delete(on: req).transform(to: .ok)
     }
     
-    open func update(_ req: Request) throws -> Future<User.Public> {
+    func update(_ req: Request) throws -> Future<User.Public> {
         guard let lhs = try req.authenticated(User.self) else {
             throw Abort(.unauthorized)
         }
@@ -56,7 +56,7 @@ final class UserController: RouteCollection {
         }
     }
     
-    open func uploadImage(_ req: Request) throws -> Future<FileRecord.Public> {
+    func uploadImage(_ req: Request) throws -> Future<FileRecord.Public> {
         guard let user = try req.authenticated(User.self) else {
             throw Abort(.unauthorized)
         }

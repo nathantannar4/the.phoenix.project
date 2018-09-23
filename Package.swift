@@ -4,7 +4,7 @@ import PackageDescription
 let package = Package(
     name: "Phoenix",
     dependencies: [
-        .package(url: "https://github.com/nathantannar4/vapor.git", from: "3.0.9"),
+        .package(url: "https://github.com/vapor/vapor.git", from: "3.1.0"),
         .package(url: "https://github.com/vapor/fluent-mysql.git", from: "3.0.1"),
         .package(url: "https://github.com/vapor/auth.git", from: "2.0.1"),
         .package(url: "https://github.com/vapor/crypto.git", from: "3.2.0"),
