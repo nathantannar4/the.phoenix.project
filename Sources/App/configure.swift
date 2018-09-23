@@ -42,9 +42,9 @@ public func configure(
         port: Environment.DATABASE_PORT,
         username: Environment.DATABASE_USER,
         password: Environment.DATABASE_PASSWORD,
-        database: Environment.DATABASE_DB,
-        characterSet: .utf8_general_ci,
-        transport: .unverifiedTLS
+        database: Environment.DATABASE_DB
+//        characterSet: .utf8_general_ci,
+//        transport: .unverifiedTLS
     )
     services.register(mysqlConfig)
     
@@ -75,7 +75,13 @@ public func configure(
     // Auth
     try services.register(AuthenticationProvider())
     middlewares.use(SessionsMiddleware.self)
-    config.prefer(MemoryKeyedCache.self, for: KeyedCache.self)
+    
+    // Cache
+    var dbsConfig = DatabasesConfig()
+    dbsConfig.add(database: MySQLDatabase(config: mysqlConfig), as: .mysql)
+    dbsConfig.enableLogging(on: .mysql)
+    services.register(dbsConfig)
+    config.prefer(MemoryCache.self, for: KeyedCache.self)
     
     // Secret
     services.register(SecretMiddleware.self)
